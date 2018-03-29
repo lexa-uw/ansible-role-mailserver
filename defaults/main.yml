@@ -1,0 +1,9 @@
+---
+# defaults file for mailserver
+mailserver_hostname: localhost
+mailserver_docker_image: "tvial/docker-mailserver:release-v5.8.0"
+mailserver_docker_container: "mailserver"
+mailserver_docker_env: {}
+mailserver_docker_ports: []
+mailserver_docker_volumes: []
+mailserver_users: []
