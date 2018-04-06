@@ -4,36 +4,40 @@
   docker_volume:
     name: "{{item}}"
   with_items:
-    - "{{mailserver_docker_container}}_maildata"
-    - "{{mailserver_docker_container}}_mailstate"
-    - "{{mailserver_docker_container}}_config"
+    - "{{mailserver_container_name}}_maildata"
+    - "{{mailserver_container_name}}_mailstate"
+    - "{{mailserver_container_name}}_config"
 
-- name: "Run mail server '{{mailserver_docker_container}}'"
+- name: "Run mail server '{{mailserver_container_name}}'"
   register: mail
   docker_container:
-    env: "{{mailserver_docker_env}}"
+    env: "{{mailserver_container_options.env}}"
     hostname: "{{mailserver_hostname}}"
-    image: "{{mailserver_docker_image}}"
-    name: "{{mailserver_docker_container}}"
-    ports: "{{mailserver_docker_ports}}"
+    image: "{{mailserver_container_options.image}}"
+    log_driver: "{{mailserver_container_options.log_driver}}"
+    log_options: "{{mailserver_container_options.log_options}}"
+    name: "{{mailserver_container_name}}"
+    ports: "{{mailserver_container_options.ports}}"
     pull: yes
+    restart: "{{mailserver_container_options.restart}}"
+    restart_policy: "{{mailserver_container_options.restart_policy}}"
     state: started
-    volumes: "{{mailserver_docker_volumes}} + [
-      '{{mailserver_docker_container}}_maildata:/var/mail',
-      '{{mailserver_docker_container}}_mailstate:/var/mail-state',
-      '{{mailserver_docker_container}}_config:/tmp/docker-mailserver'
+    volumes: "{{mailserver_container_options.volumes}} + [
+      '{{mailserver_container_name}}_maildata:/var/mail',
+      '{{mailserver_container_name}}_mailstate:/var/mail-state',
+      '{{mailserver_container_name}}_config:/tmp/docker-mailserver'
     ]"
 
-- name: "Setup mail server '{{mailserver_docker_container}}'"
+- name: "Setup mail server '{{mailserver_container_name}}'"
   command: |
-    docker exec {{mailserver_docker_container}} /bin/sh -c '
+    docker exec {{mailserver_container_name}} /bin/sh -c '
       addmailuser {{item.user}} {{item.password}} 2>/dev/null || true
     '
   with_items: "{{mailserver_users}}"
   when:
     - mail.changed
 
-- name: "Generate dkim config for '{{mailserver_docker_container}}'"
-  command: "docker exec {{mailserver_docker_container}} generate-dkim-config"
+- name: "Generate dkim config for '{{mailserver_container_name}}'"
+  command: "docker exec {{mailserver_container_name}} generate-dkim-config"
   when:
     - mail.changed
