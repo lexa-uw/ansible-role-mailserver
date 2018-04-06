@@ -18,7 +18,7 @@ Add role to project:
 Add role into your requirements(_requirements.yml_ for example):
 ```yaml
 - src: https://github.com/lexa-uw/ansible-role-mailserver
-  version: v1.0.0
+  version: v1.3.0
   name: mailserver
 ```
 
