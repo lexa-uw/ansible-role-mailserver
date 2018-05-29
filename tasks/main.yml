@@ -11,7 +11,7 @@
 - name: "Run mail server '{{mailserver_container_name}}'"
   register: mail
   docker_container:
-    env: "{{mailserver_container_options.env}}"
+    env: "{{mailserver_docker_env}}"
     hostname: "{{mailserver_hostname}}"
     image: "{{mailserver_container_options.image}}"
     log_driver: "{{mailserver_container_options.log_driver}}"

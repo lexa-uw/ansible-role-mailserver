@@ -4,7 +4,6 @@ mailserver_hostname: localhost
 mailserver_container_name: "mailserver"
 mailserver_users: []
 mailserver_container_options:
-  env: {}
   image: "tvial/docker-mailserver:release-v5.8.0"
   log_driver: "json-file"
   ports: []
@@ -13,3 +12,5 @@ mailserver_container_options:
   volumes: []
   log_options:
     tag: "{{mailserver_container_name}}"
+mailserver_docker_env:
+  env: {}
