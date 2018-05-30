@@ -31,10 +31,11 @@ Playbook example:
 ```yaml
 - hosts: all
   vars:
-    mailserver_docker_env:
-      OVERRIDE_HOSTNAME: "override.hostname"
+    mailserver_container_options:
+      env:
+        OVERRIDE_HOSTNAME: "override.hostname"
     mailserver_users:
-    - {user: "test@qwest", password: "qwest"}
+      - {user: "test@qwest", password: "qwest"}
   roles:
     - { role: mailserver }
 ```
